@@ -89,4 +89,6 @@ elif [ $option -eq 3 ]; then
     read port
     echo "Starting Ngrok tunnel on port $port..."
     ./ngrok http $port &
+    ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+    echo -e "Ngrok started successfully! Access your tunnel at:${NC} $ngrok_url"
 fi
