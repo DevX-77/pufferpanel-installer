@@ -79,16 +79,17 @@ elif [ $option -eq 3 ]; then
     systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
-    echo "Now Installing Ngrok... Please Wait"
+    clear
+    echo "Installing Ngrok... Please Wait"
     wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
     tar -xf ngrok-v3-stable-linux-amd64.tgz
     echo "Enter Your Ngrok Auth Token (get it from ngrok.com)"
     read NgrokAuthToken
     ./ngrok config add-authtoken $NgrokAuthToken
-    echo "Enter the port you want to tunnel:"
+    echo "Enter the port that you want to tunnel:"
     read port
     echo "Starting Ngrok tunnel on port $port..."
     ./ngrok http $port &
-    ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-    echo -e "Ngrok started successfully! Access your tunnel at:${NC} $ngrok_url"
+    clear 
+    echo "go to https://dashboard.ngrok.com/cloud-edge/endpoints to get your tunnel because ngrok doesn't support an ui"
 fi
