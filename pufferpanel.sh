@@ -88,18 +88,21 @@ elif [ $option -eq 3 ]; then
     ./ngrok config add-authtoken $NgrokAuthToken
     echo "Do you want to install Ngrok manually? (yes/no):"
     read install_choice
-if [ "$install_choice" == "yes" ]; then
-    echo "Please install Ngrok manually"
-    exit 0
+    if [ "$install_choice" == "yes" ]; then
+        echo "Please install Ngrok manually"
+        exit 0
+    else
+        echo "Enter the port you want to tunnel:"
+        read port
+        clear
+        echo "Starting Ngrok tunnel on port $port..."
+        ./ngrok http "$port" &
+        # Wait a moment to allow Ngrok to start
+        sleep 5
+        clear
+        ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+        echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
+    fi
 else
-    echo "Enter the port you want to tunnel:"
-    read port
-    clear
-    echo "Starting Ngrok tunnel on port $port..."
-    ./ngrok http "$port" &
-    # Wait a moment to allow Ngrok to start
-    sleep 5
-    clear
-    ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-    echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
+    echo "Invalid option selected."
 fi
