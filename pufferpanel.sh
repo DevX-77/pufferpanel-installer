@@ -87,6 +87,5 @@ elif [ $option -eq 3 ]; then
     read NgrokAuthToken
     ./ngrok config add-authtoken $NgrokAuthToken
     clear
-    echo "now you have to do tunneling mannuly"
-    echo "type → ./ngrok http (port) ex ./ngrok http 8080"
-fi  
+    echo "please install ngrok manualy ex ./ngrok http 8080"  
+fi 
