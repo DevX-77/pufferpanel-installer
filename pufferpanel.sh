@@ -90,18 +90,19 @@ elif [ "$option" -eq 3 ]; then
     systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
+    clear
     echo "Installing Ngrok... Please Wait"
     wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
     tar -xf ngrok-v3-stable-linux-amd64.tgz
-    echo "Enter Your Ngrok Auth Token:"
+    echo "Enter Your Ngrok Auth Token : get it from ngrok.com"
     read NgrokAuthToken
     ./ngrok config add-authtoken "$NgrokAuthToken"
 
-    echo "Do you want to install Ngrok manually? (yes/no):"
+    echo "Do you want to tunnel Ngrok port manually? (yes/no):"
     read install_choice
 
     if [ "$install_choice" == "yes" ]; then
-        echo "Please install Ngrok manually and run this script again to set up the tunnel."
+        echo "Please setup Ngrok tunnel manually and run this script again to set up the tunnel automatically."
         exit 0
     else
         echo "Enter the port you want to tunnel:"
