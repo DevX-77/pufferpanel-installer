@@ -16,24 +16,32 @@ echo "3) PufferPanel & Ngrok"
 echo "4) COMING SOON"
 read option
 
-if [ $option -eq 1 ]; then
+# Input validation
+if ! [[ "$option" =~ ^[0-9]+$ ]]; then
+    echo "Error: Invalid input. Please enter a number."
+    exit 1
+fi
+
+if [ "$option" -eq 1 ]; then
     clear
     echo "Downloading... Please Wait"
     apt update && apt upgrade -y
     apt install git curl wget sudo lsof iputils-ping -y
-    apt install systemctl
     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
-    chmod +x /bin/systemctl
+    chmod -R 777 /bin/systemctl
     clear
-    echo "Basic Packages Installed!" 
+    echo "Basic Packages Installed!"
     echo "sudo / curl / wget / git / lsof / ping"
-elif [ $option -eq 2 ]; then
+elif [ "$option" -eq 2 ]; then
     clear
     echo "Downloading... Please Wait"
     apt update && apt upgrade -y
+    export SUDO_FORCE_REMOVE=yes
+    apt remove sudo -y
     apt install curl wget git python3 -y
     curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
-    apt update && apt install pufferpanel -y
+    apt update && apt upgrade -y
+    apt install pufferpanel
     clear
     echo "PufferPanel installation completed!"
     echo "Enter PufferPanel Port"
@@ -53,13 +61,16 @@ elif [ $option -eq 2 ]; then
     systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
-elif [ $option -eq 3 ]; then
+elif [ "$option" -eq 3 ]; then
     clear
     echo "Downloading... Please Wait"
     apt update && apt upgrade -y
+    export SUDO_FORCE_REMOVE=yes
+    apt remove sudo -y
     apt install curl wget git python3 -y
     curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
-    apt update && apt install pufferpanel -y
+    apt update && apt upgrade -y
+    apt install pufferpanel
     clear
     echo "PufferPanel installation completed!"
     echo "Enter PufferPanel Port"
@@ -79,13 +90,33 @@ elif [ $option -eq 3 ]; then
     systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
-    clear
     echo "Installing Ngrok... Please Wait"
     wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
     tar -xf ngrok-v3-stable-linux-amd64.tgz
-    echo "Enter Your Ngrok Auth Token (get it from ngrok.com)"
+    echo "Enter Your Ngrok Auth Token:"
     read NgrokAuthToken
-    ./ngrok config add-authtoken $NgrokAuthToken
-    clear
-    echo "please install ngrok manualy ex ./ngrok http 8080"  
-fi 
+    ./ngrok config add-authtoken "$NgrokAuthToken"
+
+    echo "Do you want to install Ngrok manually? (yes/no):"
+    read install_choice
+
+    if [ "$install_choice" == "yes" ]; then
+        echo "Please install Ngrok manually and run this script again to set up the tunnel."
+        exit 0
+    else
+        echo "Enter the port you want to tunnel:"
+        read port
+        clear
+        echo "Starting Ngrok tunnel on port $port..."
+        ./ngrok http "$port" > /dev/null 2>&1 &
+
+        # Wait a moment to allow Ngrok to start
+        sleep 5
+
+        ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+        echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
+    fi
+else
+    echo "Invalid option selected."
+    exit 1
+fi
