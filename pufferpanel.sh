@@ -36,8 +36,9 @@ if [ "$option" -eq 1 ]; then
 elif [ "$option" -eq 2 ]; then
     clear
     echo "Downloading... Please Wait"
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
-    apt install pufferpanel
+    apt update && apt upgrade 
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
+    apt-get install pufferpanel
     clear
     echo "PufferPanel installation completed!"
     echo "Enter PufferPanel Port (8080)"
@@ -54,14 +55,16 @@ elif [ "$option" -eq 2 ]; then
     pufferpanel user add --name "$adminUsername" --password "$adminPassword" --email "$adminEmail" --admin
     clear
     echo "Admin user $adminUsername added successfully!"
-    systemctl restart pufferpanel
+    systemctl enable pufferpanel
+    systemctl start pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
 elif [ "$option" -eq 3 ]; then
     clear
     echo "Downloading... Please Wait"
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
-    apt install pufferpanel
+    apt update && apt upgrade
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
+    apt-get install pufferpanel
     clear
     echo "PufferPanel installation completed!"
     echo "Enter PufferPanel Port (8080)"
@@ -78,7 +81,8 @@ elif [ "$option" -eq 3 ]; then
     pufferpanel user add --name "$adminUsername" --password "$adminPassword" --email "$adminEmail" --admin
     clear
     echo "Admin user $adminUsername added successfully!"
-    systemctl restart pufferpanel
+    systemctl enable pufferpanel
+    systemctl start puffepanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
     clear
