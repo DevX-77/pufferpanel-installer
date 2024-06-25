@@ -36,7 +36,7 @@ You can install PufferPanel and Ngrok using any of the following methods:
 
 3. Running the script directly from the URL:
     ```sh
-   bash <(curl -s https://raw.githubusercontent.com/DracoVM/pufferpanel-install/main/pufferpanel.sh)
+   bash <(curl -s https://raw.githubusercontent.com/Devbhai7/pufferpanel-installer/main/pufferpanel.sh)
     ```
 
 ### Note:
