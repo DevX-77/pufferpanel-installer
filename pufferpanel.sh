@@ -24,24 +24,29 @@ fi
 
 if [ "$option" -eq 1 ]; then
     clear
-    echo "Downloading... Please Wait"
-    apt update && apt upgrade
-    apt install git curl wget sudo lsof iputils-ping
-    apt install systemctl
-    curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
-    chmod -R 777 /bin/systemctl
-    clear
-    echo "Basic Packages Installed!"
-    echo "sudo / curl / wget / git / lsof / ping"
+     echo -e "${RED}Downloading... Please Wait"
+     apt update && apt upgrade -y
+     apt install git curl wget sudo lsof iputils-ping -y
+     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
+     chmod -R 777 /bin/systemctl
+     clear
+     echo -e "${GREEN}Basic Packages Installed!" 
+     echo -e "${RED}sudo / curl / wget / git / lsof / ping"
 elif [ "$option" -eq 2 ]; then
     clear
     echo "Downloading... Please Wait"
-    apt update && apt upgrade 
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
-    apt-get install pufferpanel
+    apt update && apt upgrade -y
+    export SUDO_FORCE_REMOVE=yes
+    apt remove sudo -y
+    apt install curl wget git python3 -y
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
+    apt update && apt upgrade -y
+    curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
+    chmod -R 777 /bin/systemctl
+    apt install pufferpanel
     clear
     echo "PufferPanel installation completed!"
-    echo "Enter PufferPanel Port (8080)"
+    echo "Enter PufferPanel Port"
     read pufferPanelPort
 
     sed -i "s/\"host\": \"0.0.0.0:8080\"/\"host\": \"0.0.0.0:$pufferPanelPort\"/g" /etc/pufferpanel/config.json
@@ -55,19 +60,25 @@ elif [ "$option" -eq 2 ]; then
     pufferpanel user add --name "$adminUsername" --password "$adminPassword" --email "$adminEmail" --admin
     clear
     echo "Admin user $adminUsername added successfully!"
-    systemctl enable pufferpanel
-    systemctl start pufferpanel
+    systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
+    
 elif [ "$option" -eq 3 ]; then
     clear
     echo "Downloading... Please Wait"
-    apt update && apt upgrade
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
-    apt-get install pufferpanel
+    apt update && apt upgrade -y
+    export SUDO_FORCE_REMOVE=yes
+    apt remove sudo -y
+    apt install curl wget git python3 -y
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
+    apt update && apt upgrade -y
+    curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
+    chmod -R 777 /bin/systemctl
+    apt install pufferpanel
     clear
     echo "PufferPanel installation completed!"
-    echo "Enter PufferPanel Port (8080)"
+    echo "Enter PufferPanel Port"
     read pufferPanelPort
 
     sed -i "s/\"host\": \"0.0.0.0:8080\"/\"host\": \"0.0.0.0:$pufferPanelPort\"/g" /etc/pufferpanel/config.json
@@ -81,10 +92,10 @@ elif [ "$option" -eq 3 ]; then
     pufferpanel user add --name "$adminUsername" --password "$adminPassword" --email "$adminEmail" --admin
     clear
     echo "Admin user $adminUsername added successfully!"
-    systemctl enable pufferpanel
-    systemctl start puffepanel
+    systemctl restart pufferpanel
     clear
     echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
+
     clear
     echo "Installing Ngrok... Please Wait"
     wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
