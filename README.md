@@ -1,4 +1,4 @@
-# Notice: its uncompleted due to im busy 
+# Notice: its uncompleted due to im remaking whole script 
 # PufferPanel and Ngrok Auto-Installer for Linux x86 VPS
 
 ## Overview
