@@ -18,42 +18,21 @@ Ensure your VPS meets the following requirements:
 - Linux x86 operating system
 - Active internet connection
 - `sudo` privileges
-- `curl` installed (if not, install it using `apt install curl`)
-
+- `curl` installed
 ## Installation
+To use the installation scripts, simply run this command as root. The script will ask you whether you would like to install just the panel
 
-You can install PufferPanel and Ngrok using any of the following methods:
+```sh
+ bash <(curl -s https://raw.githubusercontent.com/Devbhai7/pufferpanel-installer/main/pufferpanel.sh)
+```
 
-1. Using `bash`:
-    ```sh
-    bash pufferpanel.sh
-    ```
-
-2. Making the script executable and running it:
-    ```sh
-    chmod +x pufferpanel.sh
-    ./pufferpanel.sh
-    ```
-
-3. Running the script directly from the URL:
-    ```sh
-   bash <(curl -s https://raw.githubusercontent.com/Devbhai7/pufferpanel-installer/main/pufferpanel.sh)
-    ```
-
-### Note:
+Note:
 If `curl` is not installed on your system, install it using the following command:
 ```sh
-apt install curl
+apt install curl -y
 ```
 
 This script will take care of downloading, installing, and configuring both PufferPanel and Ngrok for your Linux x86 VPS.
-
-## Usage
-
-After installation, you can access PufferPanel through your web browser and use Ngrok to expose your local services.
-- Use 1 Option to install basic packages not recommend
-- Use 2 Option to install PuffePanel
-- Use 3 Option to install Puffepanel+ Ngrok
 
 ## Contributing
 
