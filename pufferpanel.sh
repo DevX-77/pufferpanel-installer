@@ -32,3 +32,25 @@ echo "[6] Uninstall Ngrok"
 read option
 
 # Input validation
+if ! [[ "$option" =~ ^[0-9]+$ ]]; then
+    echo "Error: Invalid input. Please enter a number."
+    exit 1
+fi
+if [ "$option" -eq 1 ]; then
+    clear
+    echo "Downloading PufferPanel Please Wait."
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | sudo bash
+    sudo apt update
+    sudo apt-get install pufferpanel
+    clear
+    echo "Enter the username for the admin user:"
+    read Username
+    echo "Enter the password for the admin user:"
+    read Password
+    echo "Enter the email for the admin user:"
+    read Email
+    sudo pufferpanel user add --name "$Username" --password "$Password" --email "$Email" --admin
+    sudo systemctl enable --now pufferpanel
+    clear
+    echo "Installed PufferPanel & Started On You're VPS 8080 Port"
+fi
