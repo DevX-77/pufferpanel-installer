@@ -15,10 +15,11 @@ echo
    https://github.com/DevX-77/pufferpanel-installer/blob/main/LICENSE.                                                                                            
    This script is not associated with the official Pufferpanel Project.             
  ######################################################################"
+
 echo "What would you like to do?:"
 echo "[1] Install PufferPanel On (x86 linux vps)"
 echo "[2] Install PufferPanel On (free/non pre-configured vps)"
-echo "[3] Install PufferPanel On (docker vps)"
+echo "[3] Install PufferPanel On (docker)"
 echo "[4] Uninstall PufferPanel On (x86 linux vps)"
 echo "[5] Install Ngrok"
 echo "[6] Uninstall Ngrok"
