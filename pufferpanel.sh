@@ -111,10 +111,6 @@ elif [ "$option" -eq 4 ]; then
         ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
         echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
     fi
-else
-    echo "Invalid option selected."
-    exit 1
-fi
 elif [ "$option" -eq 5 ]; then
     clear
     echo "Stopping all Ngrok tunnels..."
