@@ -115,3 +115,24 @@ else
     echo "Invalid option selected."
     exit 1
 fi
+elif [ "$option" -eq 5 ]; then
+    clear
+    echo "Stopping all Ngrok tunnels..."
+    pkill ngrok
+    if [ -f /usr/local/bin/ngrok ]; then
+        echo "Removing Ngrok executable..."
+        sudo rm /usr/local/bin/ngrok
+    fi
+    if [ -f ~/ngrok.tgz ]; then
+        echo "Removing ngrok.tgz file..."
+        rm ~/ngrok.tgz
+    fi
+    if [ -d ~/.ngrok2 ]; then
+        echo "Removing Ngrok configuration directory..."
+        rm -rf ~/.ngrok2
+    fi
+    echo "Ngrok has been successfully uninstalled."
+else
+    echo "Invalid option selected."
+    exit 1
+fi
