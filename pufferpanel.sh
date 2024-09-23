@@ -1,7 +1,6 @@
 #!/bin/bash
 clear
-echo 
-"#######################################################################                                                                                  
+echo "#######################################################################                                                                                  
    Project 'pufferpanel-installer'                                                                                                                                      
    Copyright (C) 2024, DevX                                                                                                                                         
    This program is free software: you can redistribute it and/or modify            
@@ -11,15 +10,15 @@ echo
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                    
    MIT License for more details.                                                                                                                                   
    You should have received a copy of the MIT License                               
-   along with this program.  If not, see                                            
+   along with this program. If not, see                                            
    https://github.com/DevX-77/pufferpanel-installer/blob/main/LICENSE.                                                                                            
-   This script is not associated with the official Pufferpanel Project.             
+   This script is not associated with the official PufferPanel Project.             
  ######################################################################"
 
 echo "What would you like to do?:"
-echo "[1] Install PufferPanel Using (x86 linux vps)"
-echo "[2] Install PufferPanel Using (docker vps)"
-echo "[3] Uninstall PufferPanel On (x86 linux vps)"
+echo "[1] Install PufferPanel (x86 Linux VPS)"
+echo "[2] Install PufferPanel (Docker VPS)"
+echo "[3] Uninstall PufferPanel (x86 Linux VPS)"
 echo "[4] Install Ngrok"
 echo "[5] Uninstall Ngrok"
 read option
@@ -29,9 +28,10 @@ if ! [[ "$option" =~ ^[0-9]+$ ]]; then
     echo "Error: Invalid input. Please enter a number."
     exit 1
 fi
+
 if [ "$option" -eq 1 ]; then
     clear
-    echo "Downloading PufferPanel Please Wait."
+    echo "Downloading PufferPanel. Please wait..."
     curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | sudo bash
     sudo apt update
     sudo apt-get install pufferpanel
@@ -45,8 +45,7 @@ if [ "$option" -eq 1 ]; then
     sudo pufferpanel user add --name "$Username" --password "$Password" --email "$Email" --admin
     sudo systemctl enable --now pufferpanel
     clear
-    echo "Installed PufferPanel & Started On You're VPS"
-fi
+    echo "PufferPanel has been installed and started on your VPS."
 elif [ "$option" -eq 2 ]; then
     clear
     mkdir -p /var/lib/pufferpanel
@@ -62,30 +61,57 @@ elif [ "$option" -eq 2 ]; then
     read Email
     docker exec -it pufferpanel /pufferpanel/pufferpanel user add --name "$Username" --password "$Password" --email "$Email" --admin
     clear
-    echo "Installed PufferPanel & Started On You're VPS"
-fi
+    echo "PufferPanel has been installed and started on your VPS."
 elif [ "$option" -eq 3 ]; then
     clear
-    echo "Are you sure you want to uninstall PuffePanel? (yes/no):"
+    echo "Are you sure you want to uninstall PufferPanel? (yes/no):"
     read install_choice
     if [ "$install_choice" == "yes" ]; then
-        echo "Uninstalling PuffePanel..."
-        sudo systemctl stop puffepanel
-        sudo systemctl disable puffepanel
+        echo "Uninstalling PufferPanel..."
+        sudo systemctl stop pufferpanel
+        sudo systemctl disable pufferpanel
         sudo apt remove pufferpanel -y
-        sudo rm -rf /var/www/puffepanel
-        sudo rm -rf /etc/puffepanel
+        sudo rm -rf /var/www/pufferpanel
+        sudo rm -rf /etc/pufferpanel
         sudo rm -rf /var/lib/pufferpanel
         sudo rm -rf /var/log/pufferpanel
         sudo rm -rf /srv/pufferpanel
-        sudo userdel puffepanel
-        sudo groupdel puffepanel
+        sudo userdel pufferpanel
+        sudo groupdel pufferpanel
         sudo apt autoremove -y
-        sudo rm /etc/systemd/system/puffepanel.service
+        sudo rm /etc/systemd/system/pufferpanel.service
         sudo systemctl daemon-reload
         clear
-        echo "PuffePanel has been uninstalled successfully."
+        echo "PufferPanel has been uninstalled successfully."
     else
         echo "Uninstallation canceled."
-fi
+    fi
 elif [ "$option" -eq 4 ]; then
+    clear
+    echo "Installing Ngrok..."
+    wget -O ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+    tar -xf ngrok.tgz
+    clear
+    echo "Enter your Ngrok Auth Token (get it from ngrok.com):"
+    read NgrokAuthToken
+    ./ngrok config add-authtoken "$NgrokAuthToken"
+    clear
+    echo "Installation complete. Do you want to automatically start a tunnel? (yes/no)"
+    read install_choice
+    if [ "$install_choice" == "yes" ]; then
+        echo "Setup the Ngrok tunnel manually, eg, ./ngrok http 8080"
+        exit 0
+    else
+        echo "Enter the port you want to tunnel:"
+        read port
+        clear
+        echo "Starting Ngrok tunnel on port $port..."
+        ./ngrok http "$port" > /dev/null 2>&1 &
+        sleep 5  # Wait for Ngrok to start
+        ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+        echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
+    fi
+else
+    echo "Invalid option selected."
+    exit 1
+fi
