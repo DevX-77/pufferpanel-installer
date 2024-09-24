@@ -63,8 +63,7 @@ elif [ "$option" -eq 2 ]; then
     echo "PufferPanel installation completed!"
     echo "Enter any available open port for PufferPanel (e.g., 8080):"
     read PufferPanelPort
-    cp /etc/pufferpanel/config.json /etc/pufferpanel/config.json.bak  # Backup config
-    sed -i "s/\"host\": \"0.0.0.0:[0-9]*\"/\"host\": \"0.0.0.0:$PufferPanelPort\"/" /etc/pufferpanel/config.json
+    sed -i "s/\"host\": \"0.0.0.0:8080\"/\"host\": \"0.0.0.0:$PufferPanelPort\"/g" /etc/pufferpanel/config.json
     echo "Enter the username for the admin user:"
     read Username
     echo "Enter the password for the admin user:"
