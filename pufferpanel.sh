@@ -29,12 +29,13 @@ if ! [[ "$option" =~ ^[0-9]+$ ]]; then
     echo "Error: Invalid input. Please enter a number."
     exit 1
 fi
+
 if [ "$option" -eq 1 ]; then
     clear
     echo "Installing PufferPanel. Please wait..."
     curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | sudo bash
     sudo apt update
-    sudo apt-get install pufferpanel
+    sudo apt install pufferpanel -y
     clear
     echo "Enter the username for the admin user:"
     read Username
@@ -46,35 +47,37 @@ if [ "$option" -eq 1 ]; then
     sudo systemctl enable --now pufferpanel
     clear
     echo "PufferPanel has been installed and started on your VPS."
+    
 elif [ "$option" -eq 2 ]; then
     clear
-    echo "Installing PuffePanel On Free Vps/Non Pre-configured"
+    echo "Installing PufferPanel On Free Vps/Non Pre-configured"
     clear
-    echo "Building Up Dependencies ; Instalation Can Take A Bit More Time"
+    echo "Building Up Dependencies; Installation Can Take A Bit More Time"
     apt update && apt upgrade -y
-    apt install curl wget git python3 -y
+    apt install curl wget git python3 jq -y  
     curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
-    apt update && apt upgrade -y
+    apt update && apt install pufferpanel -y
     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
     chmod -R 777 /bin/systemctl
-    apt install pufferpanel
     clear
     echo "PufferPanel installation completed!"
-    echo "Enter Any Of Available Open Port For PufferPanel eg, 8080"
+    echo "Enter any available open port for PufferPanel (e.g., 8080):"
     read PufferPanelPort
-    sed -i "s/\"host\": \"0.0.0.0:8080\"/\"host\": \"0.0.0.0:$PufferPanelPort\"/g" /etc/pufferpanel/config.json
+    cp /etc/pufferpanel/config.json /etc/pufferpanel/config.json.bak  # Backup config
+    sed -i "s/\"host\": \"0.0.0.0:[0-9]*\"/\"host\": \"0.0.0.0:$PufferPanelPort\"/" /etc/pufferpanel/config.json
     echo "Enter the username for the admin user:"
     read Username
     echo "Enter the password for the admin user:"
     read Password
     echo "Enter the email for the admin user:"
     read Email
-    pufferpanel user add --name "$aUsername" --password "$Password" --email "$Email" --admin
+    pufferpanel user add --name "$Username" --password "$Password" --email "$Email" --admin  
     clear
     echo "Admin user $Username added successfully!"
     systemctl restart pufferpanel
     clear
-    echo "PufferPanel Created & Started - PORT: $pufferPanelPort"
+    echo "PufferPanel created and started - PORT: $PufferPanelPort"
+
 elif [ "$option" -eq 3 ]; then
     clear
     echo "Installing PufferPanel. Please wait..."
@@ -92,6 +95,7 @@ elif [ "$option" -eq 3 ]; then
     docker exec -it pufferpanel /pufferpanel/pufferpanel user add --name "$Username" --password "$Password" --email "$Email" --admin
     clear
     echo "PufferPanel has been installed and started on your VPS."
+
 elif [ "$option" -eq 4 ]; then
     clear
     echo "Are you sure you want to uninstall PufferPanel? (yes/no):"
@@ -101,11 +105,7 @@ elif [ "$option" -eq 4 ]; then
         sudo systemctl stop pufferpanel
         sudo systemctl disable pufferpanel
         sudo apt remove pufferpanel -y
-        sudo rm -rf /var/www/pufferpanel
-        sudo rm -rf /etc/pufferpanel
-        sudo rm -rf /var/lib/pufferpanel
-        sudo rm -rf /var/log/pufferpanel
-        sudo rm -rf /srv/pufferpanel
+        sudo rm -rf /var/www/pufferpanel /etc/pufferpanel /var/lib/pufferpanel /var/log/pufferpanel /srv/pufferpanel
         sudo userdel pufferpanel
         sudo groupdel pufferpanel
         sudo apt autoremove -y
@@ -116,6 +116,7 @@ elif [ "$option" -eq 4 ]; then
     else
         echo "Uninstallation canceled."
     fi
+
 elif [ "$option" -eq 5 ]; then
     clear
     echo "Installing Ngrok..."
@@ -129,7 +130,7 @@ elif [ "$option" -eq 5 ]; then
     echo "Installation complete. Do you want to automatically start a tunnel? (yes/no)"
     read install_choice
     if [ "$install_choice" == "yes" ]; then
-        echo "Setup the Ngrok tunnel manually, eg, ./ngrok http 8080"
+        echo "Setup the Ngrok tunnel manually, e.g., ./ngrok http 8080"
         exit 0
     else
         echo "Enter the port you want to tunnel:"
@@ -138,9 +139,11 @@ elif [ "$option" -eq 5 ]; then
         echo "Starting Ngrok tunnel on port $port..."
         ./ngrok http "$port" > /dev/null 2>&1 &
         sleep 5  # Wait for Ngrok to start
+        apt install jq -y
         ngrok_url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
         echo "Ngrok started successfully! Access your tunnel at: $ngrok_url"
     fi
+
 elif [ "$option" -eq 6 ]; then
     clear
     echo "Stopping all Ngrok tunnels..."
