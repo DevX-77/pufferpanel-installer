@@ -54,8 +54,8 @@ elif [ "$option" -eq 2 ]; then
     clear
     echo "Building Up Dependencies; Installation Can Take A Bit More Time"
     apt update && apt upgrade -y
-    apt install curl wget git python3 jq -y  
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
+    apt install curl wget git jq -y  
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | bash
     apt update && apt install pufferpanel -y
     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
     chmod -R 777 /bin/systemctl
@@ -76,6 +76,7 @@ elif [ "$option" -eq 2 ]; then
     systemctl restart pufferpanel
     clear
     echo "PufferPanel created and started - PORT: $PufferPanelPort"
+    echo "Re-run This Script To Install Ngrok Automatically"
 
 elif [ "$option" -eq 3 ]; then
     clear
@@ -109,7 +110,6 @@ elif [ "$option" -eq 4 ]; then
         sudo groupdel pufferpanel
         sudo apt autoremove -y
         sudo rm /etc/systemd/system/pufferpanel.service
-        sudo systemctl daemon-reload
         clear
         echo "PufferPanel has been uninstalled successfully."
     else
