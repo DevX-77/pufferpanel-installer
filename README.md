@@ -25,12 +25,6 @@ To use the installation scripts, simply run this command as root. The script wil
  bash <(curl -s https://raw.githubusercontent.com/DevX-77/pufferpanel-installer/refs/heads/main/pufferpanel.sh)
 ```
 
-Note:
-If `curl` is not installed on your system, install it using the following command:
-```sh
-apt install curl -y
-```
-
 This script will take care of downloading, installing, and configuring both PufferPanel and Ngrok for your Linux x86 VPS.
 
 ## Contributing
