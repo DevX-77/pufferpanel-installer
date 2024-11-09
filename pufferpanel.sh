@@ -33,7 +33,7 @@ fi
 if [ "$option" -eq 1 ]; then
     clear
     echo "Installing PufferPanel. Please wait..."
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | sudo bash
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
     sudo apt update
     sudo apt install pufferpanel -y
     clear
@@ -55,7 +55,7 @@ elif [ "$option" -eq 2 ]; then
     echo "Building Up Dependencies; Installation Can Take A Bit More Time"
     apt update && apt upgrade -y
     apt install curl wget git jq -y  
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | bash
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
     apt update && apt install pufferpanel -y
     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
     chmod -R 777 /bin/systemctl
@@ -128,7 +128,7 @@ elif [ "$option" -eq 5 ]; then
     clear
     echo "Installation complete. Do you want to automatically start a tunnel? (yes/no)"
     read install_choice
-    if [ "$install_choice" == "yes" ]; then
+    if [ "$install_choice" == "no" ]; then
         echo "Setup the Ngrok tunnel manually, e.g., ./ngrok http 8080"
         exit 0
     else
