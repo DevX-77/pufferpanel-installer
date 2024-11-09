@@ -33,7 +33,7 @@ fi
 if [ "$option" -eq 1 ]; then
     clear
     echo "Installing PufferPanel. Please wait..."
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | sudo bash
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | sudo bash
     sudo apt update
     sudo apt install pufferpanel -y
     clear
@@ -55,7 +55,7 @@ elif [ "$option" -eq 2 ]; then
     echo "Building Up Dependencies; Installation Can Take A Bit More Time"
     apt update && apt upgrade -y
     apt install curl wget git jq -y  
-    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh | bash
+    curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh?any=true | bash
     apt update && apt install pufferpanel -y
     curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py
     chmod -R 777 /bin/systemctl
